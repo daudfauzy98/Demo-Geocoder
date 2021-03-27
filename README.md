@@ -7,7 +7,7 @@ hendak digunakan.
 
 Endpoint yang digunakan :
 1. /api/coordinate?loc=[nama lokasi]
-   Menampilkan daftar koordinat lokasi yang dimasukkan
+Menampilkan daftar koordinat lokasi yang dimasukkan
    
 2. /api/location?lat=[koordinat latitude]&lan=[koordinat longitude]
-   Menampilkan nama lokasi beserta status ancaman banjir dari koordinat latitude dan longitude
+Menampilkan nama lokasi beserta status ancaman banjir dari koordinat latitude dan longitude
