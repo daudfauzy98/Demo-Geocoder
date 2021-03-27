@@ -12,3 +12,5 @@ Endpoint yang digunakan :
 Fungsi tiap endpoint :
 1. Menampilkan nama lokasi beserta status ancaman banjir dari koordinat latitude dan longitude
 2. Menampilkan daftar koordinat lokasi yang dimasukkan
+
+Ada pun hasil uji coba, dapat dilihat pada menu Issues
