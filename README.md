@@ -6,7 +6,9 @@ diatas, terlebih dahulu membuat object menggunakan konstruktor nodeGeocoder() de
 hendak digunakan.
 
 Endpoint yang digunakan :
-1. /api/coordinate?loc=[nama lokasi]
-Menampilkan daftar koordinat lokasi yang dimasukkan
-2. /api/location?lat=[koordinat latitude]&lan=[koordinat longitude]
-Menampilkan nama lokasi beserta status ancaman banjir dari koordinat latitude dan longitude
+1. /api/location?lat=[koordinat latitude]&lan=[koordinat longitude]
+2. /api/coordinate?loc=[nama lokasi]
+
+Fungsi tiap endpoint :
+1. Menampilkan nama lokasi beserta status ancaman banjir dari koordinat latitude dan longitude
+2. Menampilkan daftar koordinat lokasi yang dimasukkan
