@@ -3,19 +3,23 @@ import nodeGeocoder from 'node-geocoder'
 import fs from 'fs'
 
 const router = express.Router()
+// Setting parameter option untuk menggunakan provider map
 const options = {
    provider: 'openstreetmap'
 }
 const geoCoder = nodeGeocoder(options)
 
+// Menampilkan nama lokasi dan status ancaman banjir dari koordinat yang dimasukkan
 router.get('/location', async (req, res) => {
    const latitude = req.query.lat
    const longitude = req.query.lon
-   //const { latitude, longitude } = req.body
-
+   
+   // Cari lokasi berdasarkan koordinat
    const location = await geoCoder.reverse({ lat: latitude, lon: longitude })
 
+   // Jika lokasi ada
    if(location)  {
+      // Fungsi untuk membaca file json
       const getJsonFile = (filePath, encoding = 'utf8') => (
          new Promise((resolve, reject) => {
             fs.readFile(filePath, encoding, (err, contents) => {
@@ -27,46 +31,53 @@ router.get('/location', async (req, res) => {
          })
            .then(JSON.parse)
       )
-
+      // Baca file JSON (key: nama kelurahan, value: status ancaman banjir)
       const dataJogja = await getJsonFile('./jogja.json')
       var kelurahanArray = []
-
+      
+      // Ambil nama kelurahan saja
       for (var i in dataJogja)
          kelurahanArray.push(i)
 
-      // Coordinate Latitude and Longitude
+      // Mapping untuk mengambil atribut nama lokasi dan status
       const locationName = location.map(item => {
          const container = {}
          
-         //addressSplit.location = String(item.formattedAddress.split(',', 1))
+         // Buat atribut formattedAddress dari string menjadi array
          var addressSplit = item.formattedAddress.split(',')
          for(var i=0; i<addressSplit.length; i++)
             addressSplit[i] = addressSplit[i].trim()
          
+         // Cocokkan dengan variabel daftar kelurahan untuk mengambil nama kelurahannya saja
          const kelurahan = addressSplit.filter(element => 
             kelurahanArray.includes(element))
+         
+         // Jika kelurahan tidak cocok dengan daftar kelurahan yang ada
          if(!kelurahan)
             container.location = 'Tidak ada nama Kelurahan yang cocok'
          else {
             container.location = kelurahan[0]
             container.status = dataJogja[kelurahan]
          }
+
          return container
       })
-      
-      res.status(200).json(locationName[0])
-      //res.status(200).json({ message: 'Sukses meng-compile!', result:  })
+      // Tampilkan nama lokasi dan status ancamannya
+      res.status(200).json(locationName[0])   
    } else {
+      // Jika lokasi tidak ada
       res.status(400).json({ message: 'Koordinat tidak dikenali !'})
    }
 })
 
 // Menampilkan koordinat latitude dan longitude dari suatu lokasi
 router.get('/coordinate', async (req, res) => {
+   // Cari koordinat berdasarkan lokasi
    const coordinate = await geoCoder.geocode(req.query.loc)
 
+   // Jika koordinat dari lokasi ada
    if(coordinate)  {
-      // Ambil beberapa atribut geoCoder
+      // Mapping untuk mengambil atribut latitude, longitude, dan alamat lengkap
       const locationCoordinate = coordinate.map(item => {
          const container = {}
 
@@ -77,8 +88,10 @@ router.get('/coordinate', async (req, res) => {
          return container
       })
 
+      // Menampilkan koordinat latitude, longitude, dan alamat lengkap
       res.status(200).json(locationCoordinate)
    } else {
+      // Jika koordinat lokasi tidak ada
       res.status(400).json({ message: 'Lokasi tidak dikenali !'})
    }
 })
